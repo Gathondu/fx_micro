@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_22_132915) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_22_133842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_22_132915) do
     t.index ["alpha2"], name: "index_countries_on_alpha2"
     t.index ["alpha3"], name: "index_countries_on_alpha3"
     t.index ["iso_number"], name: "index_countries_on_iso_number"
+  end
+
+  create_table "currencies", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "iso_code"
+    t.integer "iso_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["iso_code", "iso_number"], name: "index_currencies_on_iso_code_and_iso_number"
   end
 
 end
