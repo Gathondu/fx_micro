@@ -35,3 +35,4 @@ storage/*
 tmp/*
 log/*
 *.log
+.env
