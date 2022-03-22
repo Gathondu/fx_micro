@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_22_122530) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_22_132915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "countries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "alpha2"
+    t.string "alpha3"
+    t.string "iso_number"
+    t.integer "currencies_iso_number", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alpha2"], name: "index_countries_on_alpha2"
+    t.index ["alpha3"], name: "index_countries_on_alpha3"
+    t.index ["iso_number"], name: "index_countries_on_iso_number"
+  end
 
 end
