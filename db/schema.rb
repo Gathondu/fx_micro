@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_22_134519) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_22_135258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,5 +47,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_22_134519) do
     t.index ["country_id"], name: "index_customers_on_country_id"
   end
 
+  create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "customer_id", null: false
+    t.float "input_amount"
+    t.uuid "input_currency_id", null: false
+    t.float "output_amount"
+    t.uuid "output_currency_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_transactions_on_customer_id"
+    t.index ["input_currency_id"], name: "index_transactions_on_input_currency_id"
+    t.index ["output_currency_id"], name: "index_transactions_on_output_currency_id"
+  end
+
   add_foreign_key "customers", "countries"
+  add_foreign_key "transactions", "currencies", column: "input_currency_id"
+  add_foreign_key "transactions", "currencies", column: "output_currency_id"
+  add_foreign_key "transactions", "customers"
 end
