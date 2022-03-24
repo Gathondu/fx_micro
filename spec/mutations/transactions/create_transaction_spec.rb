@@ -33,6 +33,15 @@ RSpec.describe Mutations::CreateTransaction, type: :graphql do
       }
     GQL
   end
+  let(:transactions_query) do
+    <<~GQL
+      query {
+        transactions {
+          id
+        }
+      }
+    GQL
+  end
 
   let(:customer) { create(:customer) }
   let(:input_currency) { create(:input_currency) }
@@ -61,7 +70,9 @@ RSpec.describe Mutations::CreateTransaction, type: :graphql do
         outputCurrencyId: output_currency.id
       },
     )
+    transactions = execute_graphql(transactions_query)
 
     expect(outcome['data']['createTransaction']['transaction']).to eq expected_outcome
+    expect(transactions['data']['transactions'].count).to eq 1
   end
 end
